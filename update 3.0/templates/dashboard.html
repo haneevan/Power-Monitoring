@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>OMRON Power Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        /* True Dark Theme Styling */
+        body { 
+            background-color: #FFFFFF; /* Darker background */
+            color: #e0e0e0; /* Light text */
+            font-family: 'Inter', sans-serif;
+        }
+        .container-fluid { 
+            padding: 20px; 
+            max-width: 1400px;
+        }
+        .card {
+            background-color: #1e1e1e; /* Dark card background */
+            border: 1px solid #333;
+            color: #e0e0e0;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+        .metric-card-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #10B981; /* Tailwind Green-500 for key metrics */
+        }
+        .metric-card-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 0;
+            text-transform: uppercase;
+        }
+        /* Chart container styling */
+        .chart-container {
+            position: relative;
+            height: 300px; /* Increased height for better visibility */
+            width: 100%;
+            padding: 5px;
+            margin-top: 10px;
+        }
+        .top-bar-icon {
+            font-size: 1.5rem;
+            color: #3B82F6; /* Tailwind Blue-500 */
+        }
+        .table-responsive {
+            background-color: #1e1e1e;
+        }
+        .table {
+            --bs-table-bg: #1e1e1e;
+            --bs-table-color: #e0e0e0;
+            --bs-table-border-color: #333;
+        }
+        /* Style for the Total Energy Card's gauge */
+        .gauge-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 6px solid #3a3a3a;
+            border-top: 6px solid #3B82F6; /* Primary color segment */
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row align-items-center mb-4 pb-2 border-bottom border-secondary-subtle">
+            <div class="col-6 col-md-3 d-flex align-items-center">
+                <h3 class="me-3 mb-0" style="color: #3B82F6;">電力量モニタ</h3>
+            </div>
+            <div class="col-6 col-md-9 text-end">
+                <span id="lastUpdated" class="text-secondary small me-3">Last Updated: Initial Load ({{ latest.timestamp.split(' ')[1] if latest else '--' }})</span>
+                <button id="manualRefreshBtn" class="btn btn-sm btn-outline-primary me-3">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+                </button>
+                <i class="bi bi-bell top-bar-icon me-3"></i>
+                <i class="bi bi-gear top-bar-icon"></i>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="row">
+                    <div class="col-6 col-md-4">
+                        <div class="card p-3">
+                            <p class="metric-card-label">電圧 (V)</p>
+                            <p class="metric-card-value">
+                                <span id="live-voltage">{{ "%.2f"|format(latest.val_voltage) if latest else '--' }}</span> V
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="card p-3">
+                            <p class="metric-card-label">電流 (A)</p>
+                            <p class="metric-card-value" style="color: #FBBF24;">
+                                <span id="live-current">{{ "%.3f"|format(latest.val_current) if latest else '--' }}</span> A
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
+                            <div>
+                                <p class="metric-card-label">積算電力量 (kWh)</p>
+                                <p class="metric-card-value" style="font-size: 1.8rem;">
+                                    <span id="live-energy">{{ "%.3f"|format(latest.val_energy_kwh) if latest else '--' }}</span>
+                                </p>
+                            </div>
+                            <div class="gauge-ring"></div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="card p-3 h-100">
+                    <h5 class="card-title" style="color: #bbb;">ログ</h5>
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-sm table-borderless small" style="color: #e0e0e0;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid #FFFFFF;">
+                                    <th>時間</th>
+                                    <th>V</th>
+                                    <th>A</th>
+                                    <th>kWh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in history|reverse %} 
+                                <tr>
+                                    <td style="color: #888;">{{ item.timestamp.split(' ')[1] }}</td>
+                                    <td>{{ "%.2f"|format(item.val_voltage) }}</td>
+                                    <td>{{ "%.3f"|format(item.val_current) }}</td>
+                                    <td>{{ "%.3f"|format(item.val_energy_kwh) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12 col-lg-6">
+                <div class="card p-3">
+                    <h5 class="card-title" style="color: #FFC107;">電圧(V)</h5>
+                    <div class="chart-container">
+                        <canvas id="voltageChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card p-3">
+                    <h5 class="card-title" style="color: #DC3545;">電流(A)</h5>
+                    <div class="chart-container">
+                        <canvas id="currentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="mt-4 text-center text-secondary small">
+            Data Retention: 30 days. Logging interval: {{ read_interval_ms / 1000 }} seconds.
+        </p>
+
+    </div>
+    <script>
+        // Store all necessary dynamic data on a global window object.
+        window.flaskData = {
+            history: {{ history | tojson }},
+            readIntervalMs: {{ read_interval_ms }},
+            apiUrl: '/api/latest'
+        };
+    </script>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
