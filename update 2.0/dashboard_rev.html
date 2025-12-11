@@ -4,61 +4,75 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>OMRON Power Dashboard</title>
-    <!-- Bootstrap CSS for dark mode and grid layout -->
+    <!-- Bootstrap CSS (Dark Theme) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
-        /* Dark Theme Styling */
+        /* True Dark Theme Styling */
         body { 
-            background-color: #FFFFF; /* Dark background */
-            color: #121212; /* Light text */
+            background-color: #FFFFFF; /* Darker background */
+            color: #e0e0e0; /* Light text */
+            font-family: 'Inter', sans-serif;
         }
         .container-fluid { 
             padding: 20px; 
             max-width: 1400px;
         }
         .card {
-            background-color: #1e1e1e; /* Darker card background */
+            background-color: #1e1e1e; /* Dark card background */
             border: 1px solid #333;
             color: #e0e0e0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
         }
         .metric-card-value {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: #4CAF50; /* Green for key metrics */
+            color: #10B981; /* Tailwind Green-500 for key metrics */
         }
         .metric-card-label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #888;
             margin-bottom: 0;
+            text-transform: uppercase;
         }
         /* Chart container styling */
         .chart-container {
             position: relative;
-            height: 250px; /* Fixed height for consistency */
+            height: 300px; /* Increased height for better visibility */
             width: 100%;
             padding: 5px;
             margin-top: 10px;
         }
         .top-bar-icon {
             font-size: 1.5rem;
-            color: #007bff;
-        }
-        /* Custom class for the rotating ring/gauge visual */
-        .gauge-ring {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 8px solid #3a3a3a;
-            border-top: 8px solid #007bff; /* Primary color segment */
-            transform: rotate(45deg);
+            color: #3B82F6; /* Tailwind Blue-500 */
         }
         .table-responsive {
             background-color: #1e1e1e;
+        }
+        .table {
+            --bs-table-bg: #1e1e1e;
+            --bs-table-color: #e0e0e0;
+            --bs-table-border-color: #333;
+        }
+        /* Style for the Total Energy Card's gauge */
+        .gauge-ring {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 6px solid #3a3a3a;
+            border-top: 6px solid #3B82F6; /* Primary color segment */
+            transform: rotate(45deg);
         }
     </style>
 </head>
@@ -67,113 +81,89 @@
         <!-- Top Header Bar -->
         <div class="row align-items-center mb-4 pb-2 border-bottom border-secondary-subtle">
             <div class="col-6 col-md-3 d-flex align-items-center">
-                <h3 class="me-3 mb-0" style="color: #007bff;">電力量モニタ</h3>
-                <p class="text-muted mb-0 small"></p>
+                <h3 class="me-3 mb-0" style="color: #3B82F6;">電力量モニタ</h3>
             </div>
             <div class="col-6 col-md-9 text-end">
-                <span class="text-secondary small me-3">Last Updated: {{ datetime.now().strftime("%H:%M:%S") }}</span>
+                <!-- Data will be updated by JS -->
+                <span id="lastUpdated" class="text-secondary small me-3"></span>
+                <!-- Added a manual refresh button -->
+                <button id="manualRefreshBtn" class="btn btn-sm btn-outline-primary me-3">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh
+                </button>
                 <i class="bi bi-bell top-bar-icon me-3"></i>
                 <i class="bi bi-gear top-bar-icon"></i>
             </div>
         </div>
 
-        <!-- Row 1: Key Metric Cards -->
+        <!-- Row 1: Key Metrics (Left, 8/12) and Log Table (Right, 4/12) -->
         <div class="row">
-            <!-- VOLTAGE -->
-            <div class="col-6 col-lg-3">
-                <div class="card p-3">
-                    <p class="metric-card-label">電圧 (V)</p>
-                    <p class="metric-card-value">
-                        {% if latest %}
-                            {{ "%.2f"|format(latest.val_voltage) }} V
-                        {% else %}
-                            --
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-            <!-- CURRENT -->
-            <div class="col-6 col-lg-3">
-                <div class="card p-3">
-                    <p class="metric-card-label">電流 (A)</p>
-                    <p class="metric-card-value">
-                        {% if latest %}
-                            {{ "%.3f"|format(latest.val_current) }} A
-                        {% else %}
-                            --
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-            <!-- POWER -->
-            <div class="col-6 col-lg-3">
-                <div class="card p-3">
-                    <p class="metric-card-label">有効電力 (kW)</p>
-                    <p class="metric-card-value">
-                        {% if latest %}
-                            {{ "%.3f"|format(latest.val_power_kw) }} kW
-                        {% else %}
-                            --
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-            <!-- TOTAL ENERGY (Gauge Style) -->
-            <div class="col-6 col-lg-3">
-                <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                    <div>
-                        <p class="metric-card-label">積算電力量 (kWh)</p>
-                        <p class="metric-card-value" style="font-size: 1.8rem;">
-                            {% if latest %}
-                                {{ "%.3f"|format(latest.val_energy_kwh) }}
-                            {% else %}
-                                --
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div class="gauge-ring"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Row 2: Charts (Historical Data) -->
-        <div class="row">
-            <!-- Power Chart (kW) -->
-            <div class="col-12 col-lg-6">
-                <div class="card p-3">
-                    <h5 class="card-title" style="color: #bbb;">有効電力 (Last {{ history_hours }}h)</h5>
-                    <div class="chart-container">
-                        <canvas id="powerChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <!-- Voltage Chart (V) -->
-            <div class="col-12 col-lg-6">
-                <div class="card p-3">
-                    <h5 class="card-title" style="color: #bbb;">電圧 (V)</h5>
-                    <div class="chart-container">
-                        <canvas id="voltageChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Row 3: History Charts (Smaller) -->
-        <div class="row">
-            <!-- Current History (A) -->
+            <!-- Left Section: Metric Cards (Occupies 8/12 of the row space) -->
             <div class="col-12 col-lg-8">
-                <div class="card p-3">
-                    <h5 class="card-title" style="color: #bbb;">電流 (A)</h5>
-                    <div class="chart-container" style="height: 200px;">
-                        <canvas id="currentChart"></canvas>
+                <div class="row">
+                    <!-- VOLTAGE -->
+                    <div class="col-6 col-md-3">
+                        <div class="card p-3">
+                            <p class="metric-card-label">電圧 (V)</p>
+                            <p class="metric-card-value">
+                                {% if latest %}
+                                    {{ "%.2f"|format(latest.val_voltage) }} V
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- CURRENT -->
+                    <div class="col-6 col-md-3">
+                        <div class="card p-3">
+                            <p class="metric-card-label">電流 (A)</p>
+                            <p class="metric-card-value" style="color: #FBBF24;">
+                                {% if latest %}
+                                    {{ "%.3f"|format(latest.val_current) }} A
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- POWER -->
+                    <div class="col-6 col-md-3">
+                        <div class="card p-3">
+                            <p class="metric-card-label">有効電力 (kW)</p>
+                            <p class="metric-card-value" style="color: #3B82F6;">
+                                {% if latest %}
+                                    {{ "%.3f"|format(latest.val_power_kw) }} kW
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- TOTAL ENERGY (Gauge Style) -->
+                    <div class="col-6 col-md-3">
+                        <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
+                            <div>
+                                <p class="metric-card-label">積算電力量 (kWh)</p>
+                                <p class="metric-card-value" style="font-size: 1.8rem;">
+                                    {% if latest %}
+                                        {{ "%.3f"|format(latest.val_energy_kwh) }}
+                                    {% else %}
+                                        --
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="gauge-ring"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Latest Log Entries (Table) -->
+
+            <!-- Right Section: Latest Log Entries (Occupies 4/12 of the row space) -->
             <div class="col-12 col-lg-4">
-                <div class="card p-3">
+                <div class="card p-3 h-100">
                     <h5 class="card-title" style="color: #bbb;">Latest Log Entries</h5>
-                    <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+                    <!-- Set max-height based on the height of the card row above for consistent alignment -->
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
                         <table class="table table-sm table-borderless small" style="color: #e0e0e0;">
                             <thead>
                                 <tr style="border-bottom: 1px solid #333;">
@@ -198,98 +188,170 @@
             </div>
         </div>
 
+        <!-- Row 2: Historical Charts -->
+        <div class="row mt-4">
+            <!-- Chart 1: Power History (kW) -->
+            <div class="col-12 col-lg-6">
+                <div class="card p-3">
+                    <h5 class="card-title" style="color: #3B82F6;">Active Power (kW) History</h5>
+                    <div class="chart-container">
+                        <canvas id="powerChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Chart 2: Voltage & Current History (V / A) -->
+            <div class="col-12 col-lg-6">
+                <div class="card p-3">
+                    <h5 class="card-title" style="color: #FBBF24;">Voltage (V) & Current (A) History</h5>
+                    <!-- I combined Voltage and Current into a single chart for space efficiency -->
+                    <div class="chart-container">
+                        <canvas id="voltCurrentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <p class="mt-4 text-center text-secondary small">
             Data Retention: 30 days. Logging interval: 5 seconds. History loaded for: {{ history_hours }} hours.
         </p>
 
     </div>
-    <!-- Add Bootstrap Icons for visual appeal (used in the header bar) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <script>
+        // Set the last updated time immediately
+        document.getElementById('lastUpdated').textContent = `Last Updated: ${new Date().toLocaleTimeString('ja-JP')}`;
+
+        // Add event listener for the manual refresh button
+        document.getElementById('manualRefreshBtn').addEventListener('click', function() {
+            window.location.reload(1);
+        });
+
         // --- 1. Prepare Data for Charts ---
         const historyData = {{ history | tojson }};
 
-        // Extract labels (timestamps) and data values
-        const labels = historyData.map(item => item.timestamp.split(' ')[1]); // Time only
-        const powerData = historyData.map(item => item.val_power_kw);
-        const voltageData = historyData.map(item => item.val_voltage);
-        const currentData = historyData.map(item => item.val_current);
+        // Extract labels (timestamps) and data values (using a slice for performance)
+        const dataSlice = historyData.slice(-100); 
+        const labels = dataSlice.map(item => item.timestamp.split(' ')[1]); // Time only
+        const powerData = dataSlice.map(item => item.val_power_kw);
+        const voltageData = dataSlice.map(item => item.val_voltage);
+        const currentData = dataSlice.map(item => item.val_current);
 
-        // Function to create and render a line chart
-        function createLineChart(ctxId, label, data, color) {
-            const ctx = document.getElementById(ctxId).getContext('2d');
-            const primaryColor = color;
-            const secondaryColor = primaryColor + '40'; // 40 is opacity 25%
-
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        borderColor: primaryColor,
-                        backgroundColor: secondaryColor,
-                        tension: 0.3, // Smoother curve
-                        borderWidth: 2,
-                        pointRadius: 0, // No dots on line
-                        fill: true, // Fill area under the line
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: false
-                        },
+        // Configuration for dark mode charts
+        const chartDefaults = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, labels: { color: '#e0e0e0' } },
+                title: { display: false },
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        maxTicksLimit: 12, 
+                        color: '#888'
                     },
-                    scales: {
-                        x: {
-                            // Show fewer labels on X axis for readability
-                            ticks: {
-                                maxTicksLimit: 12, 
-                                color: '#888'
-                            },
-                            grid: {
-                                color: '#333' // Darker grid lines
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                color: '#888'
-                            },
-                            grid: {
-                                color: '#333'
-                            },
-                            beginAtZero: true
-                        }
-                    }
+                    grid: { color: '#333' },
+                },
+                y: {
+                    ticks: { color: '#888' },
+                    grid: { color: '#333' },
+                    beginAtZero: true
                 }
-            });
-        }
+            }
+        };
 
         // --- 2. Render Charts ---
 
-        // Power Consumption (kW) Chart
-        createLineChart('powerChart', 'Power (kW)', powerData, '#007bff'); // Blue
+        // A. Power Consumption (kW) Chart
+        const powerCtx = document.getElementById('powerChart').getContext('2d');
+        new Chart(powerCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Active Power (kW)',
+                    data: powerData,
+                    borderColor: '#3B82F6', // Blue
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: true,
+                }]
+            },
+            options: chartDefaults
+        });
 
-        // Voltage History (V) Chart
-        createLineChart('voltageChart', 'Voltage (V)', voltageData, '#FFC107'); // Yellow/Gold
 
-        // Current History (A) Chart
-        createLineChart('currentChart', 'Current (A)', currentData, '#DC3545'); // Red
+        // B. Voltage and Current Combined Chart
+        const voltCurrentCtx = document.getElementById('voltCurrentChart').getContext('2d');
+        new Chart(voltCurrentCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Voltage (V)',
+                        data: voltageData,
+                        borderColor: '#FFC107', // Yellow/Gold
+                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false,
+                        yAxisID: 'yVoltage', // Use custom Y axis
+                    },
+                    {
+                        label: 'Current (A)',
+                        data: currentData,
+                        borderColor: '#DC3545', // Red
+                        backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false,
+                        yAxisID: 'yCurrent', // Use custom Y axis
+                    }
+                ]
+            },
+            options: {
+                ...chartDefaults,
+                scales: {
+                    x: chartDefaults.scales.x,
+                    // Voltage Axis (Left)
+                    yVoltage: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Voltage (V)',
+                            color: '#FFC107',
+                        },
+                        ticks: { color: '#FFC107' },
+                        grid: { color: '#333' }
+                    },
+                    // Current Axis (Right)
+                    yCurrent: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Current (A)',
+                            color: '#DC3545',
+                        },
+                        ticks: { color: '#DC3545' },
+                        grid: { drawOnChartArea: false }, // Only draw grid lines for the left axis
+                        min: 0
+                    }
+                }
+            }
+        });
 
 
-        // --- 3. Auto-Refresh Logic (already present) ---
-        // Use a 5-second interval based on the logger frequency
-        setTimeout(function(){
-           window.location.reload(1);
-        }, 5000);
+        // --- 3. Removed Auto-Refresh Logic (Manual Refresh only) ---
+        // The previous setTimeout function has been removed.
     </script>
 </body>
 </html>
