@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Power Monitor</title>
+    <!-- Bootstrap CSS for easy styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { max-width: 900px; margin-top: 40px; }
+        .card { box-shadow: 0 4px 12px rgba(0,0,0,.1); border-radius: 12px; overflow: hidden; }
+        .header { background-color: #007bff; color: white; padding: 15px; border-radius: 12px 12px 0 0; }
+        .data-row { font-family: monospace; font-size: 0.85rem; }
+    </style>
+</head>
+
+    <!--html body / contents-->
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h3 class="mb-0">電力量モニタ</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Modbusロガーのリアルタイム値。最終更新： {{ datetime.now().strftime("%Y-%m-%d %H:%M:%S") }}</p>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>時間</th>
+                                <th>電圧 (V)</th>
+                                <th>電流 (A)</th>
+                                <th>有効電力 (kW)</th>
+                                <th>積算有効電力量 (kWh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reading in readings %}
+                            <tr class="data-row">
+                                <td>{{ reading.timestamp }}</td>
+                                <td>{{ "%.2f"|format(reading.val_voltage) }}</td>
+                                <td>{{ "%.3f"|format(reading.val_current) }}</td>
+                                <td>{{ "%.3f"|format(reading.val_power_kw) }}</td>
+                                <td>{{ "%.5f"|format(reading.val_energy_kwh) }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="5" class="text-center text-danger">データはまだ記録されていません。ロガースレッドを確認してください。</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p class="mt-4 text-center">データ保存：{{ 30 }} 日間. 記録間隔: {{ 5 }} 秒.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Script to auto-refresh the page every 5 seconds -->
+    <script>
+        setTimeout(function(){
+           window.location.reload(1);
+        }, 5000);
+    </script>
+</body>
+</html>

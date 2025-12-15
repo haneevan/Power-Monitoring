@@ -1,0 +1,67 @@
+
+body { 
+    background-color: #FFFFFF; /* Light background */
+    color: #e0e0e0; /* Light text */
+    font-family: 'Inter', sans-serif;
+}
+.container-fluid { 
+    padding: 20px; 
+    max-width: 1400px;
+}
+.card {
+    background-color: #1e1e1e; /* Dark card background */
+    border: 1px solid #333;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+.metric-card-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #10B981; /* Tailwind Green-500 for key metrics */
+}
+.metric-card-label {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0;
+    text-transform: uppercase;
+}
+/* Chart container styling */
+.chart-container {
+    position: relative;
+    height: 300px; /* Increased height for better visibility */
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+}
+.top-bar-icon {
+    font-size: 1.5rem;
+    color: #3B82F6; /* Tailwind Blue-500 */
+}
+.table-responsive {
+    background-color: #1e1e1e;
+}
+.table {
+    --bs-table-bg: #1e1e1e;
+    --bs-table-color: #e0e0e0;
+    --bs-table-border-color: #333;
+}
+
+/* --- NEW LAYOUT ADJUSTMENTS --- */
+
+/* Ensure the log table card has consistent height and scrolling */
+.log-card {
+    height: 100%;
+    /* Override Bootstrap margin if needed to align perfectly */
+    margin-bottom: 0 !important; 
+}
+.log-table-container {
+    max-height: 280px; /* Adjusted height to fit well with metrics */
+    overflow-y: auto;
+}
