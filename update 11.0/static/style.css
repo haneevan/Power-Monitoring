@@ -1,0 +1,164 @@
+/* ====================================
+   DASHBOARD GENERAL STYLES
+   ==================================== */
+
+body { 
+    background-color: #f8f9fa; /* Light background */
+    color: #212529; /* Dark text for light background */
+    font-family: 'Inter', sans-serif;
+}
+.container-fluid { 
+    padding: 20px; 
+    max-width: 1400px;
+}
+
+/* --- Top Bar Icons --- */
+.top-bar-icon {
+    font-size: 1.5rem;
+    color: #3B82F6; /* Primary Blue color */
+    cursor: pointer;
+}
+
+/* ====================================
+   CARD & METRIC STYLES
+   ==================================== */
+
+/* Base style for all cards (Metrics, Form, Log, Charts) */
+.card {
+    border: none;
+    border-radius: 8px;
+    /* Subtle shadow to lift the card off the background */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
+    background-color: #ffffff; /* White background for all cards */
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+    /* Subtle hover effect */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+}
+
+/* Specific Metric Card Text Styles */
+.metric-card-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1;
+    /* Color is set inline in HTML for each metric */
+}
+
+.metric-card-label {
+    font-size: 0.8rem;
+    color: #6c757d; /* Muted grey label text */
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+}
+
+/* ====================================
+   LOG TABLE STYLES
+   ==================================== */
+
+.log-table-container {
+    /* Set max height to ensure table aligns with the metric/form block */
+    max-height: 280px; 
+    overflow-y: auto;
+    background-color: transparent;
+}
+
+.table {
+    /* Base table styling within the log card */
+    --bs-table-bg: transparent;
+    --bs-table-color: #212529; /* Dark text */
+    --bs-table-border-color: #e9ecef; /* Light border/divider */
+}
+
+/* ====================================
+   CHART STYLES
+   ==================================== */
+
+.chart-container {
+    position: relative;
+    height: 300px; 
+    width: 100%;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+/* ====================================
+   JQUERY UI DATEPICKER DARK THEME
+   (Overrides default 'smoothness' theme)
+   ==================================== */
+
+.ui-datepicker {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background: #333; /* Dark background */
+    border: 1px solid #555; /* Dark border */
+    color: #f1f1f1; /* Light text color */
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    z-index: 1000 !important; 
+}
+
+.ui-datepicker-header {
+    background: #444; /* Slightly lighter dark header */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 0;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+/* Next/Prev buttons */
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+    top: 6px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+    color: #3B82F6; /* Primary accent color on hover */
+}
+
+/* Day names (S, M, T, W, T, F, S) */
+.ui-datepicker th {
+    color: #ccc;
+    padding: 5px 0;
+}
+
+/* Calendar table cells and day numbers */
+.ui-datepicker td span,
+.ui-datepicker td a {
+    color: #f1f1f1;
+    text-align: center;
+    padding: 4px 6px;
+    border-radius: 4px;
+    border: 1px solid transparent; 
+    transition: background-color 0.2s;
+}
+
+/* Hover state for days */
+.ui-datepicker td a:hover {
+    background: #555; /* Dark hover */
+    border: 1px solid #777;
+    color: #fff;
+}
+
+/* Current day */
+.ui-datepicker .ui-state-highlight {
+    background: #3B82F6 !important; /* Blue primary color */
+    color: #fff !important;
+    border: 1px solid #3B82F6 !important;
+}
+
+/* Selected day */
+.ui-datepicker .ui-state-active {
+    background: #1D4ED8 !important; /* Darker blue for active selection */
+    color: #fff !important;
+    font-weight: bold;
+    border: 1px solid #1D4ED8 !important;
+}
