@@ -1,81 +1,68 @@
-import minimalmodbus
-from datetime import datetime
-import time 
-
-class OmronReadError(Exception):
-    """Custom exception for Modbus reading errors."""
-    pass
+import struct
+from pymodbus.client import ModbusSerialClient
 
 class OmronModbusClient:
-    def __init__(self, port='/dev/ttyACM0'):
+    def __init__(self, port='/dev/ttyACM0', baudrate=9600):
+        # Initializing with settings matching your manual test
+        self.client = ModbusSerialClient(
+            port=port,
+            baudrate=baudrate,
+            parity='E',      # Even parity as per Omron KM-N1
+            stopbits=1,
+            bytesize=8,
+            timeout=1
+        )
+
+    def decode_32bit_signed(self, registers):
+        """
+        Combines two 16-bit registers into a 32-bit signed integer.
+        Omron uses Big-Endian (High word first).
+        """
+        if not registers or len(registers) < 2:
+            return 0
+        # registers[0] is High Word (0x0001), registers[1] is Low Word (0xC467)
+        combined = (registers[0] << 16) | registers[1]
+        # Unpack as a signed 32-bit integer ('>i')
+        return struct.unpack('>i', struct.pack('>I', combined))[0]
+
+    def read_data(self, unit_id):
+        """
+        Reads Voltage, Current, and Active Power from a specific unit.
+        """
         try:
-            self.instrument = minimalmodbus.Instrument(port, 1)
-            self.instrument.serial.baudrate = 9600
-            self.instrument.serial.bytesize = 8
-            self.instrument.serial.parity = minimalmodbus.serial.PARITY_EVEN
-            self.instrument.serial.stopbits = 1
-            self.instrument.serial.timeout = 1.0 
-            self.instrument.close_port_after_each_call = True
+            if not self.client.connect():
+                print(f"Connection Failed to Unit {unit_id}")
+                return 0, 0, 0
+
+            # 1. Read Voltage (Address 0000, 2 registers)
+            v_res = self.client.read_holding_registers(0x0000, 2, slave=unit_id)
+            # 2. Read Current (Address 0006, 2 registers)
+            a_res = self.client.read_holding_registers(0x0006, 2, slave=unit_id)
+            # 3. Read Active Power (Address 0010, 2 registers)
+            p_res = self.client.read_holding_registers(0x0010, 2, slave=unit_id)
+
+            if any(r.isError() for r in [v_res, a_res, p_res]):
+                return 0, 0, 0
+
+            # Apply correct Omron scaling factors
+            voltage = self.decode_32bit_signed(v_res.registers) / 10.0   # 0.1V unit
+            current = self.decode_32bit_signed(a_res.registers) / 1000.0 # 0.001A unit
+            power_w = self.decode_32bit_signed(p_res.registers) / 10.0   # 0.1W unit
+
+            return voltage, current, power_w
+
         except Exception as e:
-            print(f"Failed to initialize Modbus on {port}: {e}")
+            print(f"Modbus Error on Unit {unit_id}: {e}")
+            return 0, 0, 0
+        finally:
+            self.client.close()
 
-    def read_data(self, slave_id):
-        try:
-            self.instrument.address = slave_id 
-            # High-accuracy breather to ensure the KM-N1-FLK logic is ready
-            time.sleep(0.25) 
-            
-            # Addresses updated based on your manual image
-            # 1. Voltage 1 (V) - Addr 0000
-            raw_v = self.instrument.read_registers(0, 2, functioncode=3)
-            voltage = (raw_v[0] << 16 | raw_v[1]) / 10.0 
-
-            # 2. Current 1 (A) - Addr 0006
-            raw_a = self.instrument.read_registers(6, 2, functioncode=3)
-            current = (raw_a[0] << 16 | raw_a[1]) / 1000.0
-
-            # 3. Active Power (W) - Addr 0010 (Hex) = 16 (Dec)
-            # Note: Manual shows 0010 Hex for 有効電力
-            raw_p = self.instrument.read_registers(16, 2, functioncode=3)
-            active_power = (raw_p[0] << 16 | raw_p[1]) / 10.0 
-
-            # 4. Accumulated Active Energy (Wh) - Addr 0200 (Hex) = 512 (Dec)
-            raw_wh = self.instrument.read_registers(512, 2, functioncode=3)
-            energy_wh = (raw_wh[0] << 16 | raw_wh[1])
-
-            return {
-                'val_voltage': round(voltage, 2),
-                'val_current': round(current, 3),
-                'val_power_w': round(active_power, 1),
-                'val_energy_kwh': round(energy_wh / 1000, 3),
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            }
-            
-        except Exception as e:
-            raise OmronReadError(f"Slave {slave_id} Read Error: {str(e)}")
-
+# For quick standalone testing
 if __name__ == "__main__":
-    # Standalone test to verify Modbus communication
-    client = OmronModbusClient(port='/dev/ttyUSB0') # Ensure this matches your Pi port
-    
-    units = [1, 2] # Test both Unit 01 and Unit 02
-    
-    print("--- Omron KM-N1-FLK Modbus Test ---")
-    for unit_id in units:
-        try:
-            print(f"\nScanning Unit {unit_id:02d}...")
-            v, a, p = client.read_data(unit_id)
-            
-            if v == 0 and a == 0:
-                print(f"  [!] Unit {unit_id} responded with ZEROS (Quiet Fail active).")
-                print(f"      Check if the meter is powered ON or CTs are connected.")
-            else:
-                print(f"  [SUCCESS] Data received:")
-                print(f"  - Voltage: {v:.2f} V")
-                print(f"  - Current: {a:.3f} A")
-                print(f"  - Power:   {p:.1f} W")
-                
-        except Exception as e:
-            print(f"  [ERROR] Unit {unit_id} failed: {e}")
-            
-    print("\n--- Test Complete ---")
+    test_client = OmronModbusClient()
+    for unit in [1, 2]:
+        v, a, p = test_client.read_data(unit)
+        print(f"--- Unit {unit:02d} Results ---")
+        print(f"Voltage: {v:.2f} V")
+        print(f"Current: {a:.3f} A")
+        print(f"Power:   {p/1000.0:.2f} kW ({p:.1f} W)")
