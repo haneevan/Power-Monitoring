@@ -53,3 +53,29 @@ class OmronModbusClient:
             
         except Exception as e:
             raise OmronReadError(f"Slave {slave_id} Read Error: {str(e)}")
+
+if __name__ == "__main__":
+    # Standalone test to verify Modbus communication
+    client = OmronModbusClient(port='/dev/ttyUSB0') # Ensure this matches your Pi port
+    
+    units = [1, 2] # Test both Unit 01 and Unit 02
+    
+    print("--- Omron KM-N1-FLK Modbus Test ---")
+    for unit_id in units:
+        try:
+            print(f"\nScanning Unit {unit_id:02d}...")
+            v, a, p = client.read_data(unit_id)
+            
+            if v == 0 and a == 0:
+                print(f"  [!] Unit {unit_id} responded with ZEROS (Quiet Fail active).")
+                print(f"      Check if the meter is powered ON or CTs are connected.")
+            else:
+                print(f"  [SUCCESS] Data received:")
+                print(f"  - Voltage: {v:.2f} V")
+                print(f"  - Current: {a:.3f} A")
+                print(f"  - Power:   {p:.1f} W")
+                
+        except Exception as e:
+            print(f"  [ERROR] Unit {unit_id} failed: {e}")
+            
+    print("\n--- Test Complete ---")
