@@ -184,24 +184,38 @@ $(document).ready(function() {
     $(".date-picker").datepicker({ dateFormat: "yy-mm-dd" });
 
     $('#historyForm').on('submit', function(e) {
-        e.preventDefault();
-        const start = $('#startDate').val();
-        const end = $('#endDate').val();
-        const $btn = $(this).find('button[type="submit"]');
-        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+    e.preventDefault();
+    const start = $('#startDate').val();
+    const end = $('#endDate').val();
+    
+    if (!start || !end) return; // Prevent empty searches
 
-        $.when(
-            $.getJSON('/api/unit01/history', { start_date: start, end_date: end }),
-            $.getJSON('/api/unit02/history', { start_date: start, end_date: end })
-        ).done(function(res1, res2) {
-            updateHistoryCharts(charts.histU1, res1[0]);
-            updateHistoryCharts(charts.histU2, res2[0]);
-            calculateAndDisplayStats(res1[0], res2[0]);
-            
-            const rangeText = `${start} 〜 ${end}`;
-            $('#currentRangeText').text(`表示範囲: ${rangeText}`);
-        }).always(() => $btn.prop('disabled', false).text('データ読込'));
+    const $btn = $(this).find('button[type="submit"]');
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
+
+    $.when(
+        $.getJSON('/api/unit01/history', { start_date: start, end_date: end }),
+        $.getJSON('/api/unit02/history', { start_date: start, end_date: end })
+    ).done(function(res1, res2) {
+        // 1. Update the Charts
+        updateHistoryCharts(charts.histU1, res1[0]);
+        updateHistoryCharts(charts.histU2, res2[0]);
+        
+        // 2. Update the Statistics Cards
+        calculateAndDisplayStats(res1[0], res2[0]);
+        
+        // 3. UPDATE THE TITLES (The RangeTitle logic)
+        const rangeText = `${start} 〜 ${end}`;
+        $('#currentRangeText').text(`表示範囲: ${rangeText}`);
+        $('#titleU1Hist').text(`UNIT 01: 電流履歴 [${rangeText}] (A)`);
+        $('#titleU2Hist').text(`UNIT 02: 電流履歴 [${rangeText}] (A)`);
+        $('#titleU1S2Statistics').text(`UNIT 01 統計詳細 [${rangeText}]`);
+        $('#titleU2S2Statistics').text(`UNIT 01 統計詳細 [${rangeText}]`)
+
+    }).always(() => {
+        $btn.prop('disabled', false).text('データ読込');
     });
+});
 
     $('#exportCsvBtn').on('click', function() {
         const d1 = charts.histU1.data.datasets[0].data;
@@ -225,4 +239,30 @@ $(document).ready(function() {
         link.setAttribute("download", `hikaku_export_${new Date().toISOString().slice(0,10)}.csv`);
         link.click();
     });
+    
+// --- RESET BUTTON FIX ---
+$('#resetLiveBtn').on('click', function() {
+    // 1. Check if initial history data exists in config
+    if (config.historyU1 && config.historyU2) {
+        // 2. Re-render the History Charts with the original 24h data
+        updateHistoryCharts(charts.histU1, config.historyU1);
+        updateHistoryCharts(charts.histU2, config.historyU2);
+        
+        // 3. Re-calculate the top statistics cards for the original 24h
+        calculateAndDisplayStats(config.historyU1, config.historyU2);
+    }
+    
+    // 4. Reset the UI text elements
+    $('#currentRangeText').text('表示範囲: 過去24時間');
+    $('#titleU1Hist').text('UNIT 01: 電流履歴 24h(A)');
+    $('#titleU2Hist').text('UNIT 02: 電流履歴 24h(A)');
+    $('#titleU1S2Statistics').text('UNIT 01 統計詳細過去24ｈ');
+    $('#titleU2S2Statistics').text('UNIT 02 統計詳細過去24ｈ');
+    
+    // 5. Clear the input fields in the date picker
+    $('#startDate, #endDate').val('');
+    
+    console.log("History charts reset to initial 24h data.");
+});    
+
 });
