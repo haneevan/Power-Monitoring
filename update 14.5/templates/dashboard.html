@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>電力監視ダッシュボード - {{ 'LAN - 17' if unit_id == 'unit01' else 'LAN - 13' }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row align-items-center mb-4 pb-2 border-bottom border-secondary-subtle">
+            <div class="col-6 col-md-6 d-flex align-items-center">
+                <h3 class="me-4 mb-0" style="color: #3B82F6;">
+                    電力量モニタ 
+                    <span id="unitTitle">{{ 'LAN - 17' if unit_id == 'unit01' else 'LAN - 13' }}</span>
+                </h3>
+            </div>
+            <div class="col-6 col-md-6 text-end">
+                <span id="lastUpdated" class="text-secondary small me-3">最終更新: {{ latest.timestamp.split(' ')[1] if latest else '--:--:--' }}</span>
+                <a href="/?start=dashboard" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-house me-1"></i>メニュー
+                </a>
+                <a href="/dashboard/{{'unit02' if unit_id == 'unit01' else 'unit01'}}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-arrow-repeat me-1"></i>別機械
+                </a>
+                <a href="/hikaku" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-clipboard-pulse me-1"></i>比較
+                </a>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="row g-3">
+                    <div class="col-12 col-sm-4">
+                        <div class="card p-3 shadow-sm border-0">
+                            <p class="text-muted small mb-1">電圧 (V)</p>
+                            <h2 class="mb-0" style="color: #4CAF50;">
+                                <span id="live-voltage">{{ "%.2f"|format(latest.val_voltage) if latest else '--' }}</span><small class="fs-6 ms-1">V</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="card p-3 shadow-sm border-0">
+                            <p class="text-muted small mb-1">電流 (A)</p>
+                            <h2 class="mb-0" style="color: #FBBF24;">
+                                <span id="live-current">{{ "%.3f"|format(latest.val_current) if latest else '--' }}</span><small class="fs-6 ms-1">A</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="card p-3 shadow-sm border-0">
+                            <p class="text-muted small mb-1">電力 (kW)</p>
+                            <h2 class="mb-0" style="color: #FF0000;">
+                                <span id="live-power">{{ "%.3f"|format(latest.val_power_kw) if latest and latest.val_power_kw is defined else '--' }}</span><small class="fs-6 ms-1">kW</small>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-12 text-center">
+                        <div class="card p-3 shadow-sm border-0">
+                            <p class="text-muted small mb-1">積算電力量 (kWh)</p>
+                            <h2 class="mb-0" style="color: #3B82F6;">
+                                <span id="live-energy">{{ "%.3f"|format(latest.val_energy_kwh) if latest else '--' }}</span><small class="fs-6 ms-1">kWh</small>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-3 mt-3 shadow-sm border-0">
+                    <form id="historyForm" class="row g-2 align-items-end">
+                        <div class="col-5">
+                            <label class="form-label text-muted small mb-1">開始日</label>
+                            <input type="text" class="form-control form-control-sm date-picker" id="startDate" required autocomplete="off">
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label text-muted small mb-1">終了日</label>
+                            <input type="text" class="form-control form-control-sm date-picker" id="endDate" required autocomplete="off">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">読込</button>
+                        </div>
+                    </form>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <p class="text-secondary small mb-0" id="currentRangeText">表示範囲: 過去24時間</p>
+                        <div>
+                            <button type="button" id="resetLiveBtn" class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-broadcast"></i> ライブに戻る
+                            </button>
+                            <button type="button" id="exportCsvBtn" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-file-earmark-spreadsheet me-1"></i>CSV出力
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+                <div class="card p-3 shadow-sm border-0 log-card" style="height: 100%;"> 
+                    <h6 class="card-title text-muted mb-3"><i class="bi bi-list-ul me-2"></i>リアルタイムログ (最新10件)</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover small">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>時間</th>
+                                    <th>電圧(V)</th>
+                                    <th>電流(A)</th>
+                                    <th>電力(kW)</th>
+                                    <th>電力量(kWh)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody">
+                                {% for item in history|reverse %} 
+                                {% if loop.index <= 10 %}
+                                <tr>
+                                    <td class="text-secondary">{{ item.timestamp.split(' ')[1] }}</td>
+                                    <td>{{ "%.2f"|format(item.val_voltage) }}</td>
+                                    <td>{{ "%.3f"|format(item.val_current) }}</td>
+                                    <td>{{ "%.3f"|format(item.val_power_kw) if item.val_power_kw is defined else '0.000' }}</td>
+                                    <td>{{ "%.3f"|format(item.val_energy_kwh) }}</td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+                <div class="card p-3 shadow-sm border-0">
+                    <h6 class="card-title text-muted fw-bold" id="cChartTitle">電流履歴 24h(A)</h6>
+                    <div style="height: 300px;">
+                        <canvas id="currentChart24h"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 mt-4 mt-lg-0">
+                <div class="card p-3 shadow-sm border-0">
+                    <h6 class="card-title text-muted fw-bold">電流履歴 30秒(A)</h6>
+                    <div style="height: 300px;">
+                        <canvas id="currentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 col-lg-6">
+                <div class="card p-3 shadow-sm border-0">
+                    <h6 class="card-title text-muted fw-bold" id="vChartTitle">電圧履歴 24h(V)</h6>
+                    <div style="height: 300px;">
+                        <canvas id="voltageChart24h"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 mt-4 mt-lg-0">
+                <div class="card p-3 shadow-sm border-0">
+                    <h6 class="card-title text-muted fw-bold">電圧履歴 30秒(V)</h6>
+                    <div style="height: 300px;">
+                        <canvas id="voltageChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <footer class="mt-4 mb-3 text-center text-secondary small">
+            <p>ログ間隔: {{ read_interval_ms / 1000 }}秒 | データ保持: 30日間</p>
+        </footer>
+    </div>
+    
+    <script>
+        window.flaskData = {
+            unitId: "{{ unit_id }}",
+            apiUrl: "/api/{{ unit_id }}/latest",
+            history: {{ history | tojson }},
+            readIntervalMs: {{ read_interval_ms }},
+            historyHours: {{ history_hours }}
+        };
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
