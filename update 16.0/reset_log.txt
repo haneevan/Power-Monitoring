@@ -1,0 +1,12 @@
+Connected to Modbus on /dev/ttyACM0
+--- Processing Unit 1 ---
+Failed to reset Unit 1: Exception Response(134, 6, IllegalAddress)
+--- Processing Unit 2 ---
+Failed to reset Unit 2: Exception Response(134, 6, IllegalAddress)
+Connection closed.
+Connected to Modbus on /dev/ttyACM0
+--- Processing Unit 1 ---
+FAILED: Unit 1 rejected the command: Modbus Error: [Input/Output] Modbus Error: [Invalid Message] No response received, expected at least 4 bytes (0 received)
+--- Processing Unit 2 ---
+FAILED: Unit 2 rejected the command: Modbus Error: [Input/Output] Modbus Error: [Invalid Message] No response received, expected at least 4 bytes (0 received)
+Connection closed.
