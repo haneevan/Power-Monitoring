@@ -1,0 +1,217 @@
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-02-02 13:55:41 JST; 23h ago
+   Main PID: 2838317 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 31min 15.635s
+     CGroup: /system.slice/omron-data.service
+             └─2838317 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:06] UNIT02 | 197.7V | 3.789A | 0.053kW | 0.766kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:07] UNIT01 | 197.3V | 4.479A | 0.09kW | 48.435kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:07] UNIT02 | 197.3V | 4.736A | 0.054kW | 0.766kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:08] UNIT01 | 197.7V | 3.179A | 0.099kW | 48.435kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:08] UNIT02 | 197.7V | 3.966A | 0.055kW | 0.766kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:09] UNIT01 | 197.5V | 3.952A | 0.092kW | 48.435kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:09] UNIT02 | 197.5V | 4.793A | 0.055kW | 0.766kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:10] UNIT01 | 196.5V | 37.994A | 0.088kW | 48.438kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:10] UNIT02 | 196.5V | 19.937A | 0.059kW | 0.766kWh
+ 2月 03 12:59:11 ras-01 python[2838317]: [2026-02-03 12:59:11] UNIT01 | 195.4V | 23.85A | 0.087kW | 48.44kWh
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 2min 41s ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 3.107s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:19] UNIT02 | 201.7V | 28.184A | 0.063kW | 0.875kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:19] UNIT01 | 201.1V | 3.019A | 0.1kW | 53.16kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:20] UNIT02 | 201.1V | 7.311A | 0.065kW | 0.875kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:20] UNIT01 | 201.1V | 3.083A | 0.1kW | 53.16kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:21] UNIT02 | 201.1V | 31.008A | 0.082kW | 0.875kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:21] UNIT01 | 201.8V | 3.012A | 0.1kW | 53.16kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:22] UNIT02 | 201.8V | 17.67A | 0.035kW | 0.875kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:22] UNIT01 | 201.1V | 3.016A | 0.1kW | 53.16kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:23] UNIT02 | 201.1V | 8.123A | 0.076kW | 0.875kWh
+ 2月 03 14:48:24 ras-01 python[480775]: [2026-02-03 14:48:23] UNIT01 | 201.0V | 3.27A | 0.1kW | 53.161kWh
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 1h 1min ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 1min 15.231s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:10] UNIT02 | 198.0V | 6.428A | 0.07kW | 0.934kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:10] UNIT01 | 198.3V | 6.735A | 0.084kW | 55.836kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:11] UNIT02 | 197.4V | 55.687A | 0.068kW | 0.934kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:11] UNIT01 | 197.2V | 7.915A | 0.083kW | 55.836kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:12] UNIT02 | 198.0V | 10.652A | 0.007kW | 0.934kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:12] UNIT01 | 199.1V | 14.609A | 0.074kW | 55.836kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:13] UNIT02 | 198.5V | 11.351A | 0.052kW | 0.934kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:13] UNIT01 | 197.6V | 3.696A | 0.095kW | 55.836kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:14] UNIT02 | 198.2V | 6.085A | 0.013kW | 0.934kWh
+ 2月 03 15:47:15 ras-01 python[480775]: [2026-02-03 15:47:14] UNIT01 | 197.8V | 4.494A | 0.09kW | 55.837kWh
+python3: can't open file '/root/hello_test.py': [Errno 2] No such file or directory
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 1h 3min ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 1min 17.597s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:09] UNIT02 | 198.4V | 7.523A | 0.069kW | 0.937kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:09] UNIT01 | 196.8V | 12.468A | 0.082kW | 55.926kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:10] UNIT02 | 197.2V | 7.781A | 0.009kW | 0.937kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:10] UNIT01 | 198.7V | 14.641A | 0.045kW | 55.927kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:11] UNIT02 | 197.4V | 5.21A | 0.053kW | 0.937kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:11] UNIT01 | 198.9V | 18.889A | 0.078kW | 55.927kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:12] UNIT02 | 199.4V | 3.804A | 0.055kW | 0.937kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:12] UNIT01 | 197.2V | 5.36A | 0.099kW | 55.927kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:13] UNIT02 | 197.7V | 3.839A | 0.056kW | 0.937kWh
+ 2月 03 15:49:14 ras-01 python[480775]: [2026-02-03 15:49:13] UNIT01 | 197.9V | 4.976A | 0.091kW | 55.927kWh
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 23h ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 31min 6.921s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:58:59] UNIT01 | 202.5V | 19.365A | 0.079kW | 101.291kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:58:59] UNIT02 | 202.3V | 4.315A | 0.054kW | 1.809kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:00] UNIT01 | 202.1V | 4.894A | 0.094kW | 101.291kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:00] UNIT02 | 201.7V | 3.944A | 0.054kW | 1.809kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:01] UNIT01 | 201.9V | 5.316A | 0.091kW | 101.292kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:01] UNIT02 | 201.7V | 3.957A | 0.056kW | 1.809kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:02] UNIT01 | 201.2V | 3.323A | 0.097kW | 101.292kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:02] UNIT02 | 200.9V | 4.707A | 0.055kW | 1.809kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:03] UNIT01 | 201.1V | 4.327A | 0.097kW | 101.292kWh
+ 2月 04 13:59:04 ras-01 python[480775]: [2026-02-04 13:59:03] UNIT02 | 201.3V | 33.524A | 0.064kW | 1.809kWh
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 1 day 23h ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 1h 3min 46.944s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:32] UNIT01 | 200.2V | 14.377A | 0.078kW | 150.036kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:32] UNIT02 | 200.2V | 4.995A | 0.056kW | 2.802kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:33] UNIT01 | 200.6V | 17.491A | 0.073kW | 150.036kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:33] UNIT02 | 200.6V | 5.719A | 0.061kW | 2.802kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:34] UNIT01 | 200.1V | 5.443A | 0.079kW | 150.037kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:34] UNIT02 | 200.1V | 46.316A | 0.065kW | 2.802kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:35] UNIT01 | 200.6V | 4.357A | 0.086kW | 150.037kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:35] UNIT02 | 200.6V | 7.615A | 0.079kW | 2.802kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:36] UNIT01 | 200.6V | 3.438A | 0.093kW | 150.037kWh
+ 2月 05 13:59:37 ras-01 python[480775]: [2026-02-05 13:59:36] UNIT02 | 200.6V | 10.419A | 0.034kW | 2.802kWh
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 2 days ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 1h 38min 37.096s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:40] UNIT01 | 200.3V | 13.458A | 0.084kW | 194.437kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:41] UNIT02 | 199.0V | 11.38A | 0.025kW | 3.789kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:41] UNIT01 | 199.3V | 21.937A | 0.084kW | 194.439kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:42] UNIT02 | 200.0V | 17.946A | 0.001kW | 3.789kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:42] UNIT01 | 201.3V | 13.87A | 0.072kW | 194.439kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:43] UNIT02 | 200.6V | 4.724A | 0.054kW | 3.789kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:43] UNIT01 | 200.7V | 16.331A | 0.043kW | 194.439kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:44] UNIT02 | 201.2V | 3.636A | 0.054kW | 3.789kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:44] UNIT01 | 200.3V | 4.0A | 0.09kW | 194.439kWh
+ 2月 06 13:59:46 ras-01 python[480775]: [2026-02-06 13:59:45] UNIT02 | 200.4V | 3.86A | 0.056kW | 3.789kWh
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 3 days ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 2h 1min 12.746s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:34.817653] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:35.326677] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:35.836972] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:36.346808] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:36.856222] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:37.364940] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:37.874028] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:38.383156] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:38.892131] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 07 13:59:39 ras-01 python[480775]: [2026-02-07 13:59:39.401248] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-02-03 14:46:20 JST; 4 days ago
+   Main PID: 480775 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 2h 8min 44.229s
+     CGroup: /system.slice/omron-data.service
+             └─480775 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:41.779183] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:42.288208] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:42.797243] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:43.306337] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:43.815326] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:44.324503] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:44.833538] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:45.342619] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:45.851582] ERROR: Slave 2 Read Error: No communication with the instrument (no answer)
+ 2月 08 13:59:46 ras-01 python[480775]: [2026-02-08 13:59:46.360755] ERROR: Slave 1 Read Error: No communication with the instrument (no answer)
+Hello world !
+● omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: active (running) since Mon 2026-02-09 13:57:08 JST; 2min 52s ago
+   Main PID: 2453773 (python)
+      Tasks: 1 (limit: 446)
+        CPU: 4.082s
+     CGroup: /system.slice/omron-data.service
+             └─2453773 /home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py
+
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:04] UNIT02 | 198.8V | 29.47A | 0.068kW | 4.578kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:05] UNIT01 | 198.2V | 3.108A | 0.09kW | 232.699kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:05] UNIT02 | 198.8V | 17.62A | 0.01kW | 4.578kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:06] UNIT01 | 197.8V | 4.503A | 0.1kW | 232.7kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:06] UNIT02 | 197.6V | 10.958A | 0.03kW | 4.578kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:07] UNIT01 | 198.9V | 3.476A | 0.099kW | 232.7kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:07] UNIT02 | 198.3V | 16.645A | 0.024kW | 4.579kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:08] UNIT01 | 199.1V | 3.95A | 0.086kW | 232.701kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:08] UNIT02 | 197.6V | 3.859A | 0.054kW | 4.579kWh
+ 2月 09 13:59:09 ras-01 python[2453773]: [2026-02-09 13:59:09] UNIT01 | 198.4V | 5.422A | 0.086kW | 232.702kWh
+Hello world !
+○ omron-data.service - Omron Data Collector
+     Loaded: loaded (/etc/systemd/system/omron-data.service; enabled; preset: enabled)
+     Active: inactive (dead) since Tue 2026-02-10 13:12:31 JST; 47min ago
+   Duration: 12h 12min 15.123s
+    Process: 3288925 ExecStart=/home/reigicad/DenryokuKanshi/venv/bin/python /home/reigicad/DenryokuKanshi/omron_database.py (code=killed, signal=TERM)
+   Main PID: 3288925 (code=killed, signal=TERM)
+        CPU: 13min 9.091s
+
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:53] UNIT02 | 200.2V | 4.421A | 0.058kW | 0.334kWh
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:53] UNIT01 | 199.8V | 5.206A | 0.088kW | 16.868kWh
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:54] UNIT02 | 197.6V | 4.393A | 0.058kW | 0.334kWh
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:54] UNIT01 | 198.5V | 34.384A | 0.079kW | 16.871kWh
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:55] UNIT02 | 200.6V | 4.401A | 0.058kW | 0.334kWh
+ 2月 10 13:11:56 ras-01 python[3288925]: [2026-02-10 13:11:55] UNIT01 | 197.3V | 33.571A | 0.082kW | 16.872kWh
+ 2月 10 13:12:31 ras-01 systemd[1]: Stopping omron-data.service - Omron Data Collector...
+ 2月 10 13:12:31 ras-01 systemd[1]: omron-data.service: Deactivated successfully.
+ 2月 10 13:12:31 ras-01 systemd[1]: Stopped omron-data.service - Omron Data Collector.
+ 2月 10 13:12:31 ras-01 systemd[1]: omron-data.service: Consumed 13min 9.091s CPU time.
+Hello world !
